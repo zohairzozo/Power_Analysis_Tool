@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import copy
 from io import StringIO
 
 import pandas as pd
@@ -47,3 +48,8 @@ def critical_elements(net, top_n: int = 5) -> dict[str, pd.DataFrame]:
         buses = buses.sort_values("vm_deviation", ascending=False).head(top_n)
 
     return {"critical_lines": lines, "critical_buses": buses}
+
+
+def clone_net(net):
+    """Return a safe deep copy of a pandapower network."""
+    return copy.deepcopy(net)

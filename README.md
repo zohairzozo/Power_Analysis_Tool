@@ -41,6 +41,15 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
+## Basic checks
+
+Run lightweight project checks:
+
+```bash
+python -m compileall app.py src
+python scripts_smoke_check.py
+```
+
 ## Example usage
 
 1. Start the app and select **IEEE 14 Bus**.

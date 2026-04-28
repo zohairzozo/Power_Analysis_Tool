@@ -5,6 +5,8 @@ from __future__ import annotations
 import pandas as pd
 import pandapower as pp
 
+from src.utils import clone_net
+
 
 def _ensure_costs(net) -> None:
     """Create simple linear cost functions for generators/ext_grid if missing."""
@@ -17,7 +19,7 @@ def _ensure_costs(net) -> None:
 
 def run_opf(net) -> dict:
     """Run OPF minimizing generation cost."""
-    opf_net = net.deepcopy()
+    opf_net = clone_net(net)
 
     # Make sure controllable elements have reasonable limits.
     if not opf_net.gen.empty:
