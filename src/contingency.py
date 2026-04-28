@@ -9,7 +9,6 @@ import pandas as pd
 import pandapower as pp
 
 from src.metrics import Limits, count_voltage_violations, severity_score
-from src.utils import clone_net
 
 
 def _evaluate_case(net, outaged: str, limits: Limits) -> dict:
@@ -63,13 +62,13 @@ def run_n1_contingency(net, include_trafos: bool = False, limits: Limits | None 
     records: list[dict] = []
 
     for idx in net.line.index:
-        case_net = clone_net(net)
+        case_net = net.deepcopy()
         case_net.line.at[idx, "in_service"] = False
         records.append(_evaluate_case(case_net, f"line_{idx}", limits))
 
     if include_trafos and hasattr(net, "trafo") and not net.trafo.empty:
         for idx in net.trafo.index:
-            case_net = clone_net(net)
+            case_net = net.deepcopy()
             case_net.trafo.at[idx, "in_service"] = False
             records.append(_evaluate_case(case_net, f"trafo_{idx}", limits))
 
@@ -100,7 +99,7 @@ def run_n2_contingency(
     total = max(len(pairs), 1)
 
     for i, (line_a, line_b) in enumerate(pairs, start=1):
-        case_net = clone_net(net)
+        case_net = net.deepcopy()
         case_net.line.at[line_a, "in_service"] = False
         case_net.line.at[line_b, "in_service"] = False
         records.append(_evaluate_case(case_net, f"line_{line_a}+line_{line_b}", limits))
